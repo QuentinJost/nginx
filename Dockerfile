@@ -1,5 +1,7 @@
 FROM nginx:alpine
 
+ARG DOMAIN_NAMES
+
 # Backup Nginx default conf
 RUN cp /etc/nginx/nginx.conf /etc/nginx/bkp-nginx.conf
 
@@ -33,10 +35,10 @@ RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"; \
     mkdir -p /certs; \
     cd /certs; \
     mkcert -install; \
-    mkcert -cert-file localhost.pem -key-file localhost.key.pem localhost  127.0.0.1 ::1 mercure *.local.consoneo.com *.adminoblige.fr *.module.fr local.storageservice.fr; \
+    mkcert -cert-file localhost.pem -key-file localhost.key.pem ${DOMAIN_NAMES}; \
 	cp "$(mkcert -CAROOT)/rootCA.pem" /certs/localCA.crt; \
     mkdir -p /etc/nginx/ssl; \
     cp /certs/* /etc/nginx/ssl/
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["sh", "-c", "/wait_and_start.sh"]
+CMD ["sh", "-c", "/usr/local/bin/wait_and_start.sh"]

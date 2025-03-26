@@ -1,3 +1,4 @@
 conf.d/generated.conf
 conf.d/sites/*/*.conf
 conf.d/sites/*.conf
+.env
