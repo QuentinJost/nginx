@@ -1,0 +1,23 @@
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "443:443"
+    volumes:
+      - ./conf.d/:/etc/nginx/conf.d/
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/dremwork/consoneo/dossier-c2e/:/var/www/dossier-c2e/:ro
+      - /home/dremwork/consoneo/dossier-c2e-2/:/var/www/dossier-c2e-2/:ro
+      - /home/dremwork/consoneo/dossier-c2e-3/:/var/www/dossier-c2e-3/:ro
+      - /home/dremwork/consoneo/dossier-c2e.master/:/var/www/dossier-c2e-master/:ro
+    environment:
+      - NETWORK_NAME=global_hosts
+    networks:
+      - global_hosts
+networks:
+  global_hosts:
+    name: global_hosts
+    driver: bridge
+    external: true
